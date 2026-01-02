@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF editor</title>
+    <link data-webpack="chunk-52059" rel="stylesheet" href="./index.css">
+    
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PDF编辑器</h1>
+            <p class="subtitle">本工具仅在浏览器中处理PDF文件，无需上传到服务器</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="split">PDF拆分</button>
+            <button class="tab-btn" data-tab="merge">PDF合并</button>
+            <button class="tab-btn" data-tab="watermark">水印设置</button>
+        </div>
+        
+        <!-- 拆分标签页 -->
+        <div id="split" class="tab-content active">
+            <div class="card">
+                <h2>上传PDF文件</h2>
+                <div class="file-upload-area" id="splitUploadArea">
+                    <div class="file-upload-icon">📄</div>
+                    <p>拖放PDF文件到此处，或点击按钮选择文件</p>
+                    <input type="file" id="splitFileInput" class="file-input" accept=".pdf">
+                    <label for="splitFileInput" class="file-label">选择PDF文件</label>
+                </div>
+                
+                <div class="file-list" id="splitFileList"></div>
+            </div>
+            
+            <div class="card">
+                <h2>选择拆分方式</h2>
+                <div class="split-options">
+                    <div class="split-option selected" id="splitEvenlyOption">
+                        <h3>平均分为两份</h3>
+                        <p>将PDF文件平均分为两个文件</p>
+                    </div>
+                    <div class="split-option" id="splitCustomOption">
+                        <h3>自定义拆分</h3>
+                        <p>按指定页码范围拆分</p>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="customSplitInputs" style="display: none;">
+                    <label for="pageRanges">输入页码范围（每行一组，例如：1-10）</label>
+                    <textarea id="pageRanges" rows="4" placeholder="例如：
+1-10
+11-20
+21-30
+31-37"></textarea>
+                    <p class="file-size">提示：输入页码范围，每行一个范围</p>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" id="splitBtn">开始拆分</button>
+                <button class="btn btn-secondary" id="resetSplitBtn">重置</button>
+            </div>
+            
+            <div class="progress-container" id="splitProgress">
+                <div class="progress-bar">
+                    <div class="progress" id="splitProgressBar"></div>
+                </div>
+                <p class="status" id="splitStatus">正在处理...</p>
+            </div>
+            
+            <div class="results" id="splitResults"></div>
+        </div>
+        
+        <!-- 合并标签页 -->
+        <div id="merge" class="tab-content">
+            <div class="card">
+                <h2>上传多个PDF文件</h2>
+                <div class="file-upload-area" id="mergeUploadArea">
+                    <div class="file-upload-icon">📚</div>
+                    <p>拖放多个PDF文件到此处，或点击按钮选择文件</p>
+                    <input type="file" id="mergeFileInput" class="file-input" accept=".pdf" multiple>
+                    <label for="mergeFileInput" class="file-label">选择多个PDF文件</label>
+                </div>
+                
+                <div class="file-list" id="mergeFileList"></div>
+            </div>
+            
+            <div class="card">
+                <h2>合并设置</h2>
+                <div class="form-group">
+                    <label for="mergedFileName">合并后的文件名</label>
+                    <input type="text" id="mergedFileName" placeholder="例如：合并后的文档.pdf" value="合并后的文档.pdf">
+                </div>
+                
+                <div class="form-group">
+                    <label>文件合并顺序</label>
+                    <p class="file-size">拖拽文件列表中的项目可以调整合并顺序</p>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" id="mergeBtn">开始合并</button>
+                <button class="btn btn-secondary" id="resetMergeBtn">重置</button>
+            </div>
+            
+            <div class="progress-container" id="mergeProgress">
+                <div class="progress-bar">
+                    <div class="progress" id="mergeProgressBar"></div>
+                </div>
+                <p class="status" id="mergeStatus">正在处理...</p>
+            </div>
+            
+            <div class="results" id="mergeResults"></div>
+        </div>
+        
+        <!-- 水印设置标签页 -->
+        <div id="watermark" class="tab-content">
+            <div class="card">
+                <h2>水印设置</h2>
+                <p>在这里配置水印，拆分和合并操作都可以应用水印</p>
+                
+                <div class="form-group">
+                    <label for="watermarkText">水印文字</label>
+                    <input type="text" id="watermarkText" placeholder="例如：机密文件" value="示例水印">
+                </div>
+                
+                <div class="form-group">
+                    <label for="watermarkSize">水印大小</label>
+                    <input type="range" id="watermarkSize" min="10" max="60" value="30">
+                    <p class="file-size">当前大小: <span id="watermarkSizeValue">30</span>px</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>水印位置</label>
+                    <div class="watermark-options-grid">
+                        <div class="watermark-option selected" data-position="center">
+                            <h4>居中</h4>
+                            <p>在页面中央添加单个水印</p>
+                        </div>
+                        <div class="watermark-option" data-position="diagonal">
+                            <h4>对角线平铺</h4>
+                            <p>沿对角线均匀平铺水印</p>
+                        </div>
+                        <div class="watermark-option" data-position="tiled">
+                            <h4>网格平铺</h4>
+                            <p>在整个页面网格状平铺水印</p>
+                        </div>
+                        <div class="watermark-option" data-position="top-left">
+                            <h4>左上角</h4>
+                            <p>在页面左上角添加水印</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>水印预览</label>
+                    <div class="watermark-preview" id="watermarkPreview">
+                        <!-- 水印将通过JS动态添加 -->
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary" id="applyWatermarkBtn">应用水印设置</button>
+                    <button class="btn btn-secondary" id="resetWatermarkBtn">重置水印</button>
+                </div>
+            </div>
+        </div>
+<footer>
+            <p>本工具完全在浏览器中运行，不会上传您的PDF文件到任何服务器，请放心使用</p>
+            <p><span>© w无问知否 </span><span id="TIME" >&</span><span>® - PDF 编辑器</span> </p>
+            <!--<p>使用PDF-Lib库实现，支持大多数PDF文件处理</p> -->
+            <p>本站有任何问题请联系：<a target="_blank" title="https://space.bilibili.com/11281446" color="#F0596B" id="LINKTO" href="https://space.bilibili.com/11281446">w无问知否</a></p>
+        </footer>
+    </div>
+    <script>
+	const t = 2025;
+	const TIME = document.getElementById("TIME");
+	TIME.setAttribute("t",t);
+	const _time = new Date().getFullYear();
+	if( t != _time ){
+		TIME.innerHTML = `2025 - ${ _time}`
+	}
+    </script>
+    <!-- 引入必要的JS库 -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js" id="pdfLibMinJs"></script>
+    <script src="./index.js"></script>
+    <script src="./download.js"></script>
+    <!--<script src="./pdf-lib.min.js"></script>-->
+</body>
+</html>
