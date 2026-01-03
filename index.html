@@ -11,7 +11,7 @@
     <div class="container">
         <header>
             <h1>PDF编辑器</h1>
-            <p class="subtitle">本工具仅在浏览器中处理PDF文件，无需上传到服务器<span id="lastUpdateTime" fontSize="1em"> placeholder </span></p>
+            <p class="subtitle">本工具仅在浏览器中处理PDF文件，无需上传到服务器</p>
 			
         </header>
         
@@ -170,9 +170,9 @@
         </div>
 <footer>
             <p>本工具完全在浏览器中运行，不会上传您的PDF文件到任何服务器，请放心使用</p>
-            <p>©<span uid="Bilibili-uid" id="AuthorId"> palceholder </span><span id="time">palceholder</span> PDF 编辑器<span id="version">palceholder</span> </p>
+            <p>©<span uid="Bilibili-uid" id="AuthorId"> AuthorId </span><span id="time">time</span> PDF 编辑器<span id="lastUpdateTime">lastUpdateTime</span> </p>
             <!--<p>使用PDF-Lib库实现，支持大多数PDF文件处理</p> -->
-            <p>本站有任何问题请联系：<a target="_blank" title="https://space.bilibili.com/11281446" color="#F0596B" id="LINKTO" href="https://space.bilibili.com/11281446">w无问知否</a></p>
+            <p>本站有任何问题请联系：<a target="_blank" title="https://space.bilibili.com/11281446" style="text-decoration: none;" id="LINKTO" href="https://space.bilibili.com/11281446">w无问知否</a></p>
         </footer>
     </div>
     <script>
@@ -184,13 +184,13 @@
 			const __year = new Date().getFullYear();
 			
 			const AUTHORID = document.getElementById("AuthorId");
-			const VERSION = document.getElementById("version");//
+			//const VERSION = document.getElementById("version");
 			const TIME = document.getElementById("time");
 			const LASTUPDATETIME = document.getElementById("lastUpdateTime");
 
-			LASTUPDATETIME.innerHTML = __lastUpdateTime;
+			LASTUPDATETIME.innerHTML = `更新于${__lastUpdateTime}`;
 			AUTHORID.innerHTML = __AuthorId;
-			VERSION.innerHTML = __lastUpdateTime;
+			//VERSION.innerHTML = __lastUpdateTime;
 			TIME.setAttribute("year",__year);
 			
 			if( __time != __year ){
@@ -206,4 +206,5 @@
 </body>
 
 </html>
+
 
